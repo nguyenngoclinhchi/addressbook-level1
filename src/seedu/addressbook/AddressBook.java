@@ -1070,13 +1070,13 @@ public class AddressBook {
     private static boolean isPersonNameValid(String name) {
         //TODO: implement a more permissive validation
         if (name.length() == 0) return false;
-        System.out.println(name);
         char c = name.charAt(0);
         int value = (int) c;
         boolean sen = true;
         if ((value < 65 || value > 90) && (value < 97 || value > 122)) sen = false;
-        System.out.println(sen);
-        return name.matches("(\\w|\\s)+");
+        if (!sen) return false; //nmae cannot start with a special char or numbers
+        return name.matches("(\\w|\\s)+"); //allow name to have special character and number
+        //return name.matches("^[a-zA-Z\\s]+"); //only name to have alphabets
     }
 
     /**
@@ -1097,7 +1097,8 @@ public class AddressBook {
      * @return whether arg is a valid person email
      */
     private static boolean isPersonEmailValid(String email) {
-        return email.matches("\\S+@\\S+\\.\\S+"); // email is [non-whitespace]@[non-whitespace].[non-whitespace]
+        return email.matches("\\S+@\\S+\\.\\S+");
+        // email is [non-whitespace]@[non-whitespace].[non-whitespace]
         //TODO: implement a more permissive validation
     }
 
