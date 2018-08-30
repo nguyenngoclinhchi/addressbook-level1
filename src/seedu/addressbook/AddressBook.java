@@ -1,12 +1,10 @@
 package seedu.addressbook;
-
 /*
  * NOTE : =============================================================
  * This class is written in a procedural fashion (i.e. not Object-Oriented)
  * Yes, it is possible to write non-OO code using an OO language.
  * ====================================================================
  */
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,19 +21,18 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
+import static javafx.scene.input.KeyCode.Z;
 /*
  * NOTE : =============================================================
  * This class header comment below is brief because details of how to
  * use this class are documented elsewhere.
  * ====================================================================
  */
-
 /**
  * This class is used to maintain a list of person data which are saved
  * in a text file.
  **/
 public class AddressBook {
-
     /**
      * Default file path used if the user doesn't provide the file name.
      */
@@ -65,15 +62,29 @@ public class AddressBook {
      * at which java String.format(...) method can insert values.
      * =========================================================================
      */
+    //%1$s, %2$s, ... represent the first, second, ... string argument
+    //MESSAGE TO NOTIFY
     private static final String MESSAGE_ADDED = "New person added: %1$s, Phone: %2$s, Email: %3$s";
     private static final String MESSAGE_ADDRESSBOOK_CLEARED = "Address book has been cleared!";
+
+    //MESSAGE TO HELP
     private static final String MESSAGE_COMMAND_HELP = "%1$s: %2$s";
     private static final String MESSAGE_COMMAND_HELP_PARAMETERS = "\tParameters: %1$s";
     private static final String MESSAGE_COMMAND_HELP_EXAMPLE = "\tExample: %1$s";
+
+    //MESSAGE TO DELETE
     private static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+
+    //MESSAGE TO DISPLAY PERSON DATA
     private static final String MESSAGE_DISPLAY_PERSON_DATA = "%1$s  Phone Number: %2$s  Email: %3$s";
+
+    //MESSAGE TO DISPLAY LIST ELEMENT INDEX
     private static final String MESSAGE_DISPLAY_LIST_ELEMENT_INDEX = "%1$d. ";
+
+    //MESSAGE GOODBYE
     private static final String MESSAGE_GOODBYE = "Exiting Address Book... Good bye!";
+
+    //ERRORS
     private static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format: %1$s " + LS + "%2$s";
     private static final String MESSAGE_INVALID_FILE = "The given file name [%1$s] is not a valid file name!";
     private static final String MESSAGE_INVALID_PROGRAM_ARGS = "Too many parameters! Correct program argument format:"
@@ -81,14 +92,21 @@ public class AddressBook {
                                                             + LS + "\tjava AddressBook [custom storage file path]";
     private static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
     private static final String MESSAGE_INVALID_STORAGE_FILE_CONTENT = "Storage file has invalid content";
+
     private static final String MESSAGE_PERSON_NOT_IN_ADDRESSBOOK = "Person could not be found in address book";
+
     private static final String MESSAGE_ERROR_CREATING_STORAGE_FILE = "Error: unable to create file: %1$s";
     private static final String MESSAGE_ERROR_MISSING_STORAGE_FILE = "Storage file missing: %1$s";
     private static final String MESSAGE_ERROR_READING_FROM_FILE = "Unexpected error: unable to read from file: %1$s";
     private static final String MESSAGE_ERROR_WRITING_TO_FILE = "Unexpected error: unable to write to file: %1$s";
+
+    //MESSAGE TO NOTIFY SUCCESS
     private static final String MESSAGE_PERSONS_FOUND_OVERVIEW = "%1$d persons found!";
+
     private static final String MESSAGE_STORAGE_FILE_CREATED = "Created new empty storage file: %1$s";
+
     private static final String MESSAGE_WELCOME = "Welcome to your Address Book!";
+
     private static final String MESSAGE_USING_DEFAULT_FILE = "Using default storage file : " + DEFAULT_STORAGE_FILEPATH;
 
     // These are the prefix strings to define the data type of a command parameter
@@ -98,6 +116,8 @@ public class AddressBook {
     private static final String PERSON_STRING_REPRESENTATION = "%1$s " // name
                                                             + PERSON_DATA_PREFIX_PHONE + "%2$s " // phone
                                                             + PERSON_DATA_PREFIX_EMAIL + "%3$s"; // email
+
+    //COMMAND LINE: ADD
     private static final String COMMAND_ADD_WORD = "add";
     private static final String COMMAND_ADD_DESC = "Adds a person to the address book.";
     private static final String COMMAND_ADD_PARAMETERS = "NAME "
@@ -105,30 +125,36 @@ public class AddressBook {
                                                       + PERSON_DATA_PREFIX_EMAIL + "EMAIL";
     private static final String COMMAND_ADD_EXAMPLE = COMMAND_ADD_WORD + " John Doe p/98765432 e/johnd@gmail.com";
 
+    //COMMAND LINE: FIND
     private static final String COMMAND_FIND_WORD = "find";
     private static final String COMMAND_FIND_DESC = "Finds all persons whose names contain any of the specified "
                                         + "keywords (case-sensitive) and displays them as a list with index numbers.";
     private static final String COMMAND_FIND_PARAMETERS = "KEYWORD [MORE_KEYWORDS]";
     private static final String COMMAND_FIND_EXAMPLE = COMMAND_FIND_WORD + " alice bob charlie";
 
+    //COMMAND LINE: LIST
     private static final String COMMAND_LIST_WORD = "list";
     private static final String COMMAND_LIST_DESC = "Displays all persons as a list with index numbers.";
     private static final String COMMAND_LIST_EXAMPLE = COMMAND_LIST_WORD;
 
+    //COMMAND LINE: DELETE
     private static final String COMMAND_DELETE_WORD = "delete";
     private static final String COMMAND_DELETE_DESC = "Deletes a person identified by the index number used in "
                                                     + "the last find/list call.";
     private static final String COMMAND_DELETE_PARAMETER = "INDEX";
     private static final String COMMAND_DELETE_EXAMPLE = COMMAND_DELETE_WORD + " 1";
 
+    //COMMAND LINE: CLEAR
     private static final String COMMAND_CLEAR_WORD = "clear";
     private static final String COMMAND_CLEAR_DESC = "Clears address book permanently.";
     private static final String COMMAND_CLEAR_EXAMPLE = COMMAND_CLEAR_WORD;
 
+    //COMMAND LINE: HELP
     private static final String COMMAND_HELP_WORD = "help";
     private static final String COMMAND_HELP_DESC = "Shows program usage instructions.";
     private static final String COMMAND_HELP_EXAMPLE = COMMAND_HELP_WORD;
 
+    //COMMAND LINE: EXIT
     private static final String COMMAND_EXIT_WORD = "exit";
     private static final String COMMAND_EXIT_DESC = "Exits the program.";
     private static final String COMMAND_EXIT_EXAMPLE = COMMAND_EXIT_WORD;
@@ -217,19 +243,9 @@ public class AddressBook {
             showResultToUser(feedback);
         }
     }
-
-    /*
-     * NOTE : =============================================================
-     * The method header comment can be omitted if the method is trivial
-     * and the header comment is going to be almost identical to the method
-     * signature anyway.
-     * ====================================================================
-     */
-
     private static void showWelcomeMessage() {
         showToUser(DIVIDER, DIVIDER, VERSION, MESSAGE_WELCOME, DIVIDER);
     }
-
     private static void showResultToUser(String result) {
         showToUser(result, DIVIDER);
     }
@@ -395,6 +411,8 @@ public class AddressBook {
      */
     private static String[] splitCommandWordAndArgs(String rawUserInput) {
         final String[] split =  rawUserInput.trim().split("\\s+", 2);
+        //string.trim(): consume the whitespace at the beginning and the end
+        //string.trim().split(): spilt the words into small words and store them in the string
         return split.length == 2 ? split : new String[] { split[0] , "" }; // else case: no parameters
     }
 
@@ -974,6 +992,8 @@ public class AddressBook {
         final int indexOfEmailPrefix = encoded.indexOf(PERSON_DATA_PREFIX_EMAIL);
         // name is leading substring up to first data prefix symbol
         int indexOfFirstPrefix = Math.min(indexOfEmailPrefix, indexOfPhonePrefix);
+        //we know that the name must be at first, so we need to find the min position of phone and email then use substring
+        //string.substring (int i, int j): take the substring from position i to j - 1
         return encoded.substring(0, indexOfFirstPrefix).trim();
     }
 
@@ -1048,8 +1068,15 @@ public class AddressBook {
      * @param name to be validated
      */
     private static boolean isPersonNameValid(String name) {
-        return name.matches("(\\w|\\s)+");  // name is nonempty mixture of alphabets and whitespace
         //TODO: implement a more permissive validation
+        if (name.length() == 0) return false;
+        System.out.println(name);
+        char c = name.charAt(0);
+        int value = (int) c;
+        boolean sen = true;
+        if ((value < 65 || value > 90) && (value < 97 || value > 122)) sen = false;
+        System.out.println(sen);
+        return name.matches("(\\w|\\s)+");
     }
 
     /**
@@ -1058,8 +1085,9 @@ public class AddressBook {
      * @param phone to be validated
      */
     private static boolean isPersonPhoneValid(String phone) {
-        return phone.matches("\\d+");    // phone nonempty sequence of digits
         //TODO: implement a more permissive validation
+        if (phone.length() > 15) return false; //based on the international rule, phone numbers cannot be more than 15 digits
+        return phone.matches("\\d+");    // phone nonempty sequence of digits
     }
 
     /**
